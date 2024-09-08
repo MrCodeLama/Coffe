@@ -5,7 +5,7 @@ public class ConnectDB {
     private Connection connection;
 
     public ConnectDB() {
-        String url = "jdbc:sqlite:coffe.db";
+        String url = "jdbc:sqlite:coffee.db";
 
         try {
             connection = DriverManager.getConnection(url);
