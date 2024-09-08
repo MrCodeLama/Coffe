@@ -9,30 +9,9 @@ import com.Coffe.model.CoffeeType;
 import com.Coffe.model.Packing;
 import com.Coffe.model.Van;
 //UpdateVanMaxWeight can add option to clear van
+//
 public class Main {
-
     public static void main(String[] args) {
-        ConnectDB db = new ConnectDB();
-        Connection connection = db.getConnection();
-        if (connection != null) {
-            try {
-                Statement statement = connection.createStatement();
-
-                String createTable = "CREATE TABLE IF NOT EXISTS van (id INTEGER PRYMARY KEY, name TEXT, price REAL, quantity INTEGER, packing TEXT, type TEXT, weight REAL, packVolume REAL, quality INTEGER)";
-                statement.executeUpdate(createTable);
-
-                Coffee coffee = new Coffee("Luca", 1, Packing.Bag, CoffeeType.Grian, 2.4, 0.5, 10);
-
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }finally {
-                db.closeConnection();
-            }
-        } else {
-
-            System.out.println("Connection failed.");
-
-        }
 
     }
 }

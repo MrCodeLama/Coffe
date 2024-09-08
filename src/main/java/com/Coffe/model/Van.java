@@ -85,27 +85,5 @@ public class Van {
             System.out.println("Connection failed");
         }
     }
-
-    public void loadCoffee(Coffee coffee, int quantity) {
-        updateCurrents();
-        if(coffee.getPackVolume()*quantity > maxVolume) {
-            System.out.println("Pack limit reached!");
-        } else {
-            ConnectDB db = new ConnectDB();
-            Connection connection = db.getConnection();
-            if (connection != null) {
-                try {
-                    Statement statement = connection.createStatement();
-                    statement.executeUpdate(new StringBuilder().append("INSERT INTO Van (name, price, quantity, packing, type, weight, packVolume, quality) VALUES").append("'").append(coffee.getName()).append("', ").append("'").append(coffee.getPrice()).append("', ").append(quantity).append(", ").append("'").append(coffee.getPacking()).append("', ").append("'").append(coffee.getCoffeeType()).append("', ").append("'").append(coffee.getWeight()).append("', ").append("'").append(coffee.getPackVolume()).append("', ").append(coffee.getQuality()).append(")").toString());
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                } finally {
-                    db.closeConnection();
-                }
-            } else {
-                System.out.println("Connection failed");
-            }
-        }
-    }
 }
 
