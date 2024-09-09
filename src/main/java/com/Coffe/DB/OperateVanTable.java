@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
 import java.util.List;
 
 public class OperateVanTable {
@@ -95,29 +96,65 @@ public class OperateVanTable {
         return connectExecuteQuery("SELECT * FROM van");
     }
 
-    public void printVanTable() {
-        String table = getVanTable();
-        System.out.println("|-id-|-name-|-price-|-quantity-|-packing-|-type-|-weight-|-packVolume-|-quality-|-price/weight-|");
-        System.out.println(table);
-    }
-
     public String sortByCoef() {
         return connectExecuteQuery("SELECT * FROM van ORDER BY coef ASC");
-    }
-
-    public void printSortedByCoef() {
-        String table = sortByCoef();
-        System.out.println("|-id-|-name-|-price-|-quantity-|-packing-|-type-|-weight-|-packVolume-|-quality-|-price/weight-|");
-        System.out.println(table);
     }
 
     public String getCoffeeByQuality(int minQuality, int maxQuality) {
         return connectExecuteQuery("SELECT * FROM van WHERE quality <= " + maxQuality +" AND quality >=" + minQuality + " ORDER BY quality ASC");
     }
 
-    public void printCoffeeByQuality(int minQuality, int maxQuality) {
-        String table = getCoffeeByQuality(minQuality, maxQuality);
-        System.out.println("|-id-|-name-|-price-|-quantity-|-packing-|-type-|-weight-|-packVolume-|-quality-|-price/weight-|");
-        System.out.println(table);
+    public double getCurrentVolume() {
+        ConnectDB db = new ConnectDB();
+        double volume = 0;
+        Connection connection = db.getConnection();
+        if (connection != null) {
+            try {
+                Statement statement = connection.createStatement();
+                String createTable = "CREATE TABLE IF NOT EXISTS van (id INTEGER PRIMARY KEY, name TEXT, price REAL, quantity INTEGER, packing TEXT, type TEXT, weight REAL, packVolume REAL, quality INTEGER, coef REAL)";
+                statement.executeUpdate(createTable);
+                ResultSet resultSet = statement.executeQuery("SELECT packVolume, quantity FROM van");
+                while (resultSet.next()) {
+                    double tempVolume = resultSet.getDouble(1) * resultSet.getInt(2);
+                    volume+=tempVolume;
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }finally {
+                db.closeConnection();
+            }
+        } else {
+            System.out.println("Connection failed.");
+        }
+        return volume;
     }
+
+    public double getCurrentPrice() {
+        ConnectDB db = new ConnectDB();
+        double price = 0;
+        Connection connection = db.getConnection();
+        if (connection != null) {
+            try {
+                Statement statement = connection.createStatement();
+                String createTable = "CREATE TABLE IF NOT EXISTS van (id INTEGER PRIMARY KEY, name TEXT, price REAL, quantity INTEGER, packing TEXT, type TEXT, weight REAL, packVolume REAL, quality INTEGER, coef REAL)";
+                statement.executeUpdate(createTable);
+                ResultSet resultSet = statement.executeQuery("SELECT price, quantity FROM van");
+                while (resultSet.next()) {
+                    double tempVolume = resultSet.getDouble(1) * resultSet.getInt(2);
+                    price+=tempVolume;
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }finally {
+                db.closeConnection();
+            }
+        } else {
+            System.out.println("Connection failed.");
+        }
+        return price;
+    }
+
+    //"SELECT packVolume, price, quantity FROM van"
 }
